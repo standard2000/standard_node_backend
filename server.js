@@ -7,6 +7,6 @@ app.get('/', function (req, res) {
 
 const PORT = 5000;
 
-app.listen(port, () => {
+app.listen(PORT, () => {
     console.log(`server is running on port ${PORT}`);
 })
