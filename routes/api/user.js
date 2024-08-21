@@ -2,13 +2,16 @@ const express = require("express");
 const router = express.Router();
 const validator = require('validator');
 const bcrypt = require('bcrypt');
+const jwt = require('jsonwebtoken');
+const key = require("../../config/config").secretkey;
+
 
 router.get("/test", (req, res) => {
     res.send({ message: "You are communicating with user api" });
 });
 
 const User = require('../../models/userModel');
-// register 
+// User register 
 router.post('/register', (req, res) => {
     let { name, email, password, password2 } = req.body;
     const errors = {};
@@ -65,5 +68,36 @@ router.post('/register', (req, res) => {
         })
 
 })
+
+// User login 
+router.post("/login", (req, res) => {
+    const { email, password } = req.body;
+    const errors = {};
+    User.findOne({ email: email }).then(user => {
+        if (!user) {
+            errors.message = "Email does not exists!";
+            return res.json(errors)
+        }
+
+        bcrypt.compare(password, user.password).then(isMatch => {
+            if (!isMatch) {
+                errors.message = "Password incorrect!";
+                res.json(errors)
+            }
+
+            const payload = { name: user.name, email: user.email }
+            jwt.sign(payload, key, { expiresIn: 3600 }, (err, token) => {
+                res.status(200).json({
+                    success: true,
+                    token: token
+                })
+            })
+
+
+        })
+
+    });
+});
+
 
 module.exports = router;
