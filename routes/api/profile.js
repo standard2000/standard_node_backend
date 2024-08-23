@@ -35,5 +35,17 @@ router.post('/', auth, (req, res) => {
 });
 
 
+router.get('/all', auth, (req, res) => {
+    Profile.find({})
+        .then(allProfile => {
+            res.json({success: true, allProfile})
+        })
+        .catch(err=> {
+            console.log(err);
+            res.json({success: false})
+        })
+    
+})
+
 
 module.exports = router;
