@@ -99,5 +99,40 @@ router.post("/login", (req, res) => {
     });
 });
 
+// Token test
+router.post('/getdata', (req, res) => {
+    const token = req.headers.authorization;
+
+    console.log('--------', req);
+    jwt.verify(token, key, (err, decoded) => {
+        if (err) {
+            console.log(err);
+            res.status(400).json({ success: false, img: 'Not valid token!' })
+        } else {
+            console.log(decoded)
+            const decodeData = decoded
+
+            User.findOne({ email: decoded.email }).then(user => {
+                    if (user) {
+
+                        console.log(user);
+                        res.status(200).json(decodeData);
+                    } else {
+                        res.status(400).json({ success: false, img: 'Not valid token!' })
+                    }
+                })
+                .catch(err => {
+                    console.log(err);
+                })
+        }
+    })
+})
+
+// auth Get User Info
+router.post('/getUserInfo', auth, (req, res) => {
+    console.log("req", req.body);
+    res.status(400).json({ hello: 'hello' });
+});
+
 
 module.exports = router;
