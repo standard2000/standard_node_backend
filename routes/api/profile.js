@@ -48,4 +48,19 @@ router.get('/all', auth, (req, res) => {
 })
 
 
+router.delete('/', auth, (req, res) => {
+    Profile.findOneAndRemove({user: req.body.id})
+        .then(deleted => {
+            if(deleted) {
+                res.json({success: true, deleted})
+            } else {
+                res.json({success: false})
+            }
+        })
+        .catch(err=> {
+            console.log(err);
+            res.json({errer: 'error'})
+        })
+})
+
 module.exports = router;
