@@ -4,6 +4,7 @@ const validator = require('validator');
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 const key = require("../../config/config").secretkey;
+const auth = require("../../middleware/auth");
 
 
 router.get("/test", (req, res) => {
