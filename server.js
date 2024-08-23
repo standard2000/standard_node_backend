@@ -4,7 +4,7 @@ const bodyParser = require("body-parser");
 const mongoose = require('mongoose');
 
 const user = require("./routes/api/user");
-
+const profile = require('./routes/api/profile');
 // connect mongodb
 const db = require('./config/config').mongoURI;
 mongoose
@@ -24,6 +24,7 @@ app.get('/', function (req, res) {
 
 // routes
 app.use("/api/users", user);
+app.use("/api/profile", profile);
 
 
 const PORT = 5000;
